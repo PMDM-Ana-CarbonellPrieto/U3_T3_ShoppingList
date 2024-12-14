@@ -2,6 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:t3_shopping_list/screens/products.dart';
 
 class LoginScreen extends StatefulWidget {
+  // TODO Act3: Usarios de prueba
+  static final Map<String, String> users = {
+    'batoi@gmail.com': 'B_123456',
+    'anadam@gmail.com': 'A_123456',
+    'empar@gmail.com': 'E_profe1'
+  };
+
   const LoginScreen({super.key});
 
   @override
@@ -10,6 +17,17 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
+  // TODO Act3: Controladores para recoger los valores de los TextField del formulario
+  final _emailController = TextEditingController();
+  final _pswrdController = TextEditingController();
+
+  @override
+  void dispose() {
+    // TODO Act3: Deshabilita los controladores
+    _emailController.dispose();
+    _pswrdController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +51,8 @@ class _LoginScreenState extends State<LoginScreen> {
     return Container(
       margin: const EdgeInsets.only(bottom: 16.0),
       child: TextFormField(
+        // TODO Act3: Añade el controlador
+        controller: _emailController,
         decoration: InputDecoration(
             labelText: 'User',
             hintText: 'Write your email address',
@@ -41,9 +61,9 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
         ),
         validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'Sorry, user can\'t be empty.';
-          }
+          if (value == null || value.isEmpty) return 'Sorry, user can\'t be empty.';
+          // TODO Act3: Comprueba si el usuario tiene @
+          if (!value.contains('@')) return 'Sorry, user has to be an email';
           return null;
         },
       ),
@@ -54,6 +74,8 @@ class _LoginScreenState extends State<LoginScreen> {
     return Container(
       margin: const EdgeInsets.only(bottom: 16.0),
       child: TextFormField(
+        // TODO Act3: Añade el controlador
+        controller: _pswrdController,
         obscureText: true,
         obscuringCharacter: '*',
         decoration: InputDecoration(
@@ -64,12 +86,12 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
         ),
         validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'Sorry, password can not be empty.';
-          }
-          if (value.length < 5) {
-            return 'Sorry, password length must be 5 characters or greater';
-          }
+          if (value == null || value.isEmpty) return 'Sorry, password can not be empty.';
+          // TODO Act3: Comprueba los distintos requisitos de la contraseña
+          if (value.length < 8) return 'Sorry, password length must be 8 characters or greater';
+          if (!value.contains(RegExp(r'[A-Z]'))) return 'Sorry, password has to contain at least one capital letter.';
+          if (!value.contains(RegExp(r'[0-9]'))) return 'Sorry, password has to contain at least one number.';
+          if (!value.contains(RegExp(r'[\W_]'))) return 'Sorry, password has to contain at least one symbol.';
           return null;
         },
       ),
@@ -84,11 +106,20 @@ class _LoginScreenState extends State<LoginScreen> {
         child: const Text('Login'),
         onPressed: () {
           if (_formKey.currentState!.validate()) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text(' Trying to login ...')),
-            );
+            // TODO Act3: Comprueba si el usuario existe y si la contraseña es correcta
+            final String email = _emailController.text;
 
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const ProductsScreen()));
+            if (LoginScreen.users.containsKey(email) && LoginScreen.users[email] == _pswrdController.text) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Logging in ... Welcome!'),),
+              );
+              // TODO Act3: Remplaza la pantalla actual por la de productos
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const ProductsScreen()));
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Incorrect user or password, try again.'),),
+              );
+            }
           }
         }
       ),

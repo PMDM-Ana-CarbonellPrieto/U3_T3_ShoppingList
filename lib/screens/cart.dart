@@ -44,7 +44,10 @@ class _CartScreenState extends State<CartScreen> {
       child: Row(
         children: [
           IconButton(
-            onPressed: () => setState(() => product.units--),
+            onPressed: () => setState(() {
+              // TODO Act1: Las unidades no pueden bajar de 1
+              if (product.units <= 1) product.units--;
+            }),
             icon: const Icon(
               Icons.remove_circle_outline,
               color: Colors.red,
