@@ -1,23 +1,64 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:t3_shopping_list/models/product.dart';
 import 'package:t3_shopping_list/providers/products_data.dart';
-import 'package:t3_shopping_list/screens/product_detail.dart';
+
+import '../models/product.dart';
+import '../components/products_list.dart';
+import 'cart.dart';
 
 class ProductsScreen extends StatelessWidget {
-  const ProductsScreen({Key? key}) : super(key: key);
+  const ProductsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // TODO Act1: Variable que guardará la lista de productos obtenida
+    ProductsData? productsData;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('List of Products'),
+        actions: [
+          // TODO Act1: Crea el botón del carrito
+          IconButton(
+            onPressed: () {
+              ProductsData? selectedProducts = productsData?.getSelectedProducts();
+
+              // TODO Act1: Se asegura que la lista de productos no es nula y hay productos seleccionados para navegar a la siguiente pantalla
+              if (selectedProducts != null && selectedProducts.getSize() > 0) {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => CartScreen(selectedProducts)));
+              } else {
+                // TODO Act1: Muestra un mensaje por pantalla
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: const Text('Carrito vacio'),
+                      content: const Text('Debes seleccionar un producto primero.'),
+                      actions: [
+                        // TODO Act1: Botón para cerrar el mensaje
+                        TextButton(
+                          child: const Text('Ok'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
+              }
+            },
+            icon: const Icon(Icons.shopping_cart)
+          )
+        ],
       ),
       body: FutureBuilder(
           future: ProductsData.loadJson(context, 'assets/json/products.json'),
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
             if (snapshot.hasData) {
-              return _ProductsListView(ProductsData.fromJson(snapshot.data!));
+              // TODO Act1: Guarda la lista de productos
+              productsData = ProductsData.fromJson(snapshot.data!);
+              // TODO Act1: Reutiliza el Widget de la lista, pasándole los productos, el color del precio y el Widget con el botón
+              return ProductsListView(productsData!, priceColor: Colors.grey, trailingWidget: _shoppingBagButton,);
             } else {
               return const Center(child: CircularProgressIndicator(),);
             }
@@ -25,40 +66,37 @@ class ProductsScreen extends StatelessWidget {
       ),
     );
   }
+
+  // TODO Act1: Devuelve el Widget con el botón de selección
+  Widget _shoppingBagButton(Product product) {
+    return _ShoppingBagButton(product);
+  }
 }
 
-class _ProductsListView extends StatelessWidget {
-  final ProductsData _productsData;
+// TODO Act1: Botón para seleccionar producto y gestionar el estado del mismo
+class _ShoppingBagButton extends StatefulWidget {
+  final Product _product;
 
-  _ProductsListView(this._productsData);
+  const _ShoppingBagButton(this._product, {super.key});
+
+  @override
+  State<_ShoppingBagButton> createState() => _ShoppingBagButtonState();
+}
+
+class _ShoppingBagButtonState extends State<_ShoppingBagButton> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: _productsData.getSize(),
-      itemBuilder: (context, index) =>
-        _listItem(context, _productsData.getProduct(index)),
-    );
-  }
-
-  Widget _listItem(BuildContext context, Product product) {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: ListTile(
-        onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) =>
-                ProductDetail(product.id, product.name, product.description),
-          ),
-        ),
-        leading: Image.asset(product.image, width: 100.0, height: 100.0, fit: BoxFit.contain, alignment: Alignment.bottomCenter,),
-        trailing: const Icon(Icons.shopping_bag),
-        title: Text('${product.price}'),
-        shape: RoundedRectangleBorder(
-          side: const BorderSide(color: Colors.indigo),
-          borderRadius: BorderRadius.circular(10.0)
-        ),
+    return IconButton(
+      onPressed: () => setState(() {
+        // TODO Act1: Cambia estado de selección y reinicia uniades
+        widget._product.isSelected = !widget._product.isSelected;
+        widget._product.units = 1;
+      }),
+      icon: Icon(
+        Icons.shopping_bag,
+        // TODO Act1: Dependiendo de si está seleccionado o no recibe un color
+        color: widget._product.isSelected ? Colors.green : Colors.grey,
       ),
     );
   }

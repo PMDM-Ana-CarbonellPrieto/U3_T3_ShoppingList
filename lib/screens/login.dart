@@ -1,9 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:t3_shopping_list/screens/products.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -32,7 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _eMailInput() {
     return Container(
-      margin: EdgeInsets.only(bottom: 16.0),
+      margin: const EdgeInsets.only(bottom: 16.0),
       child: TextFormField(
         decoration: InputDecoration(
             labelText: 'User',
@@ -53,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _passwordInput() {
     return Container(
-      margin: EdgeInsets.only(bottom: 16.0),
+      margin: const EdgeInsets.only(bottom: 16.0),
       child: TextFormField(
         obscureText: true,
         obscuringCharacter: '*',
@@ -79,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _loginButton() {
     return Container(
-      padding: EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8.0),
       alignment: Alignment.centerRight,
       child: ElevatedButton(
         child: const Text('Login'),
@@ -89,7 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
               const SnackBar(content: Text(' Trying to login ...')),
             );
 
-            Navigator.push(context, MaterialPageRoute(builder: (context) => ProductsScreen()));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const ProductsScreen()));
           }
         }
       ),

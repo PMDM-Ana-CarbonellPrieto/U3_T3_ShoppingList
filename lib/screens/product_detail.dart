@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ProductDetail extends StatelessWidget {
@@ -10,13 +9,12 @@ class ProductDetail extends StatelessWidget {
   final _myTextStyle2 = const TextStyle(color: Colors.indigo, fontSize: 30.0);
   final _myTextStyle3 = const TextStyle(color: Colors.indigo, fontSize: 25.0);
 
-  const ProductDetail(this._id, this._name, this._description, {Key? key})
-      : super(key: key);
+  const ProductDetail(this._id, this._name, this._description, {super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Product detail'),),
+      appBar: AppBar(title: const Text('Product detail'),),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(colors: [Colors.grey.shade100, Colors.green.shade100])

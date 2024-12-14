@@ -20,9 +20,13 @@ class ProductsData {
 
   Product getProduct(int index) => _products[index];
   int getSize() => _products.length;
+  // TODO Act1: Devuelve un ProductsData creado a partir de una lista que contiene únicamente los productos seleccionados
+  ProductsData getSelectedProducts() => ProductsData._(_products.where((product) => product.isSelected).toList());
+  // TODO Act1: Calcula el precio total de los productos sumando iterativamente el resultado de multiplicar el precio por las unidades de cada uno
+  double getTotalPrice() => _products.fold(0, (value, product) => value += product.price * product.units);
 
   static Future<String> loadJson(BuildContext context, String file) async {
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 2));
     return await DefaultAssetBundle.of(context).loadString(file);
   }
 

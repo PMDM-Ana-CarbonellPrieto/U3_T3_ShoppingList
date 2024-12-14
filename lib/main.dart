@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:t3_shopping_list/screens/login.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   static const _title = 'Shopping List';
+
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
