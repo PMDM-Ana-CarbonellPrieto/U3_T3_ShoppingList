@@ -41,7 +41,8 @@ class ProductsListView extends StatelessWidget {
             // TODO Act1: Muestra el nombre y el precio del producto
             Text(product.name),
             Text(
-              '${product.price} €',
+              // TODO Act2: Se añade la unidad de medida al precio
+              '${product.finalPrice.toStringAsFixed(2)} €/${product.measureUnit}',
               style: TextStyle(fontSize: 14, color: _priceColor),
             )
           ],

@@ -57,8 +57,8 @@ class ProductsScreen extends StatelessWidget {
             if (snapshot.hasData) {
               // TODO Act1: Guarda la lista de productos
               productsData = ProductsData.fromJson(snapshot.data!);
-              // TODO Act1: Reutiliza el Widget de la lista, pasándole los productos, el color del precio y el Widget con el botón
-              return ProductsListView(productsData!, priceColor: Colors.grey, trailingWidget: _shoppingBagButton,);
+              // TODO Act2: Devuelve el Widget con la lista de productos y la barra de orden
+              return _OrderedProductList(productsData!);
             } else {
               return const Center(child: CircularProgressIndicator(),);
             }
@@ -66,37 +66,79 @@ class ProductsScreen extends StatelessWidget {
       ),
     );
   }
-
-  // TODO Act1: Devuelve el Widget con el botón de selección
-  Widget _shoppingBagButton(Product product) {
-    return _ShoppingBagButton(product);
-  }
 }
 
-// TODO Act1: Botón para seleccionar producto y gestionar el estado del mismo
-class _ShoppingBagButton extends StatefulWidget {
-  final Product _product;
+// TODO Act2: Crea la barra con los atributos a ordenar y la lista de productos
+class _OrderedProductList extends StatefulWidget {
+  final ProductsData _productsData;
 
-  const _ShoppingBagButton(this._product, {super.key});
+  const _OrderedProductList(this._productsData, {super.key});
 
   @override
-  State<_ShoppingBagButton> createState() => _ShoppingBagButtonState();
+  State<_OrderedProductList> createState() => _OrderedProductListState();
 }
 
-class _ShoppingBagButtonState extends State<_ShoppingBagButton> {
+class _OrderedProductListState extends State<_OrderedProductList> {
+  // TODO Act2: Guarda el item seleccionado
+  OrderBy selected = OrderBy.name;
 
   @override
   Widget build(BuildContext context) {
+    return Column(
+      children: [
+        // TODO Act2: Crea la barra con los items a ordenar
+        Container(
+          height: 55,
+          color: Colors.lightBlueAccent,
+          child: ListView.builder(
+            padding: const EdgeInsets.all(5.0),
+            scrollDirection: Axis.horizontal,
+            itemCount: OrderBy.values.length,
+            itemBuilder: (context, index) => _listItem(OrderBy.values[index]),
+          ),
+        ),
+        // TODO Act1: Reutiliza el Widget de la lista, pasándole los productos, el color del precio y el Widget con el botón
+        // TODO Act2: Le indica que ocupe el espacio restante
+        Expanded(child: ProductsListView(widget._productsData, priceColor: Colors.grey, trailingWidget: _shoppingBagButton,)),
+      ],
+    );
+  }
+
+  // TODO Act2: Crea cada item con el nombre del atributo a ordenar
+  Widget _listItem(OrderBy value) {
+    return Padding(
+      padding: const EdgeInsets.all(5.0),
+      child: TextButton(
+        onPressed: () => setState(() {
+          // TODO Act2: Si se pulsa guarda el item seleccionado y ordena la lista e productos
+          selected = value;
+          widget._productsData.orderBy(value);
+        }),
+        style: ButtonStyle(
+          shape: const WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15.0),),),),
+          // TODO Act2: Coloca un color al item dependiendo de si es el seleccionado o no
+          backgroundColor: WidgetStatePropertyAll(value == selected ? Colors.yellow : Colors.white),
+        ),
+        child: Text(
+          value == OrderBy.measureUnit ? 'measure unit' : value.name,
+          style: const TextStyle(color: Colors.blue,),
+        ),
+      )
+    );
+  }
+
+  // TODO Act1: Botón para seleccionar producto y gestionar el estado del mismo
+  Widget _shoppingBagButton(Product product) {
     return IconButton(
       onPressed: () => setState(() {
         // TODO Act1: Cambia estado de selección y reinicia uniades
-        widget._product.isSelected = !widget._product.isSelected;
-        widget._product.units = 1;
+        product.isSelected = !product.isSelected;
+        product.units = 1;
       }),
       icon: Icon(
         Icons.shopping_bag,
         // TODO Act1: Dependiendo de si está seleccionado o no recibe un color
-        color: widget._product.isSelected ? Colors.green : Colors.grey,
+        color: product.isSelected ? Colors.green : Colors.grey,
       ),
     );
   }
