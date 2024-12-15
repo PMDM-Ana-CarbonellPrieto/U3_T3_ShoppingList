@@ -3,6 +3,8 @@ class Product {
   String name;
   double price;
   String category;
+  // TODO Act4: Añade la imagen de la categoría
+  String categoryImage;
   String image;
   String description;
   // TODO Act1: Variables para guardar el estado de la selección y la cantidad de unidades
@@ -16,13 +18,15 @@ class Product {
   String recipe;
 
   // TODO Act2: Se recogen las nuevas variables en ambos constructores
-  Product(this.id, this.name, this.price, this.category, this.image, this.description, this.measureUnit, this.discount, this.iva, this.calories, this.recipe);
+  // TODO Act4: Se recoge la ruta de la imagen de la categoría
+  Product(this.id, this.name, this.price, this.category, this.categoryImage, this.image, this.description, this.measureUnit, this.discount, this.iva, this.calories, this.recipe);
 
   factory Product.fromMap(Map<String, dynamic> map) => Product(
       map['id'],
       map['name'],
       map['price'],
       map['category'],
+      map['categoryImage'],
       map['image'],
       map['description'],
       map['measureUnit'],

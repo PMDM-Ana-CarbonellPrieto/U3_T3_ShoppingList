@@ -26,11 +26,9 @@ class ProductsListView extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: ListTile(
-        onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) =>
-                ProductDetail(product.id, product.name, product.description),
+        // TODO Act4: Cuando se pulsa abre la pantalla de detalle y le pasa el producto
+        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                ProductDetail(product),
           ),
         ),
         leading: Image.asset(product.image, width: 100.0, height: 100.0, fit: BoxFit.contain, alignment: Alignment.bottomCenter,),
