@@ -21,20 +21,32 @@ class _CartScreenState extends State<CartScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Shopping Cart'),
+        title: const Text(
+          'My Shopping Cart',
+          style: TextStyle(color: Colors.white),
+        ),
+        elevation: 5.0,
+        shadowColor: Colors.black,
+        backgroundColor: Colors.deepPurple,
         actions: [
           // TODO Act1: Calcula el precio total de los productos seleccionados y lo muestra en la AppBar
           Padding(
             padding: const EdgeInsets.only(right: 10),
             child: Text(
               '${widget._productsData.getTotalPrice().toStringAsFixed(2)} €',
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.white
+              ),
             )
           ),
         ],
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
+      backgroundColor: Colors.deepPurple.shade50,
       // TODO Act1: Reutiliza el Widget de la lista de productos, pasándole los productos seleccionados, el color del precio y el Widget con el contador de unidades
-      body: ProductsListView(widget._productsData, priceColor: Colors.indigo, trailingWidget: _productCounter,)
+      body: ProductsListView(widget._productsData, priceColor: Colors.deepPurple, trailingWidget: _productCounter,)
     );
   }
 
@@ -53,7 +65,7 @@ class _CartScreenState extends State<CartScreen> {
               color: Colors.red,
             ),
           ),
-          Text('${product.units}', style: const TextStyle(fontSize: 20, color: Colors.indigo,),),
+          Text('${product.units}', style: const TextStyle(fontSize: 20, color: Colors.deepPurple,),),
           IconButton(
             onPressed: () => setState(() => product.units++),
             icon: const Icon(

@@ -15,7 +15,13 @@ class ProductsScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('List of Products'),
+        title: const Text(
+          'List of Products',
+          style: TextStyle(color: Colors.white),
+        ),
+        elevation: 5.0,
+        shadowColor: Colors.black,
+        backgroundColor: Colors.deepPurple,
         actions: [
           // TODO Act1: Crea el botón del carrito
           IconButton(
@@ -47,10 +53,14 @@ class ProductsScreen extends StatelessWidget {
                 );
               }
             },
-            icon: const Icon(Icons.shopping_cart)
+            icon: const Icon(
+              Icons.shopping_cart,
+              color: Colors.white,
+            )
           )
         ],
       ),
+      backgroundColor: Colors.deepPurple.shade50,
       body: FutureBuilder(
           future: ProductsData.loadJson(context, 'assets/json/products.json'),
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
@@ -88,8 +98,17 @@ class _OrderedProductListState extends State<_OrderedProductList> {
       children: [
         // TODO Act2: Crea la barra con los items a ordenar
         Container(
+          decoration: BoxDecoration(
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.grey,
+                offset: Offset(0.0, 5.0),
+                blurRadius: 10.0,
+              )
+            ],
+            color: Colors.deepPurple.shade200,
+          ),
           height: 55,
-          color: Colors.lightBlueAccent,
           child: ListView.builder(
             padding: const EdgeInsets.all(5.0),
             scrollDirection: Axis.horizontal,
@@ -115,13 +134,17 @@ class _OrderedProductListState extends State<_OrderedProductList> {
           widget._productsData.orderBy(value);
         }),
         style: ButtonStyle(
-          shape: const WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15.0),),),),
+          shape: const WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(50.0),),),),
           // TODO Act2: Coloca un color al item dependiendo de si es el seleccionado o no
-          backgroundColor: WidgetStatePropertyAll(value == selected ? Colors.yellow : Colors.white),
+          backgroundColor: WidgetStatePropertyAll(
+            value == selected ? Colors.deepPurple : Colors.white,
+          ),
         ),
         child: Text(
           value == OrderBy.measureUnit ? 'measure unit' : value.name,
-          style: const TextStyle(color: Colors.blue,),
+          style: TextStyle(
+            color: value == selected ? Colors.white : Colors.deepPurple,
+          ),
         ),
       )
     );
@@ -138,7 +161,7 @@ class _OrderedProductListState extends State<_OrderedProductList> {
       icon: Icon(
         Icons.shopping_bag,
         // TODO Act1: Dependiendo de si está seleccionado o no recibe un color
-        color: product.isSelected ? Colors.green : Colors.grey,
+        color: product.isSelected ? Colors.deepPurple : Colors.deepPurple.shade100,
       ),
     );
   }

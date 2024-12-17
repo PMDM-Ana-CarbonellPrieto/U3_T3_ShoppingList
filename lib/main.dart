@@ -16,8 +16,17 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: _title,
       home: Scaffold(
-        appBar: AppBar(title: const Text(_title),),
+        appBar: AppBar(
+          title: const Text(
+            _title,
+            style: TextStyle(color: Colors.white),
+          ),
+          elevation: 5.0,
+          shadowColor: Colors.black,
+          backgroundColor: Colors.deepPurple,
+        ),
         body: const LoginScreen(),
+        backgroundColor: Colors.deepPurple.shade50,
       ),
     );
   }

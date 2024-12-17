@@ -54,11 +54,13 @@ class _LoginScreenState extends State<LoginScreen> {
         // TODO Act3: Añade el controlador
         controller: _emailController,
         decoration: InputDecoration(
-            labelText: 'User',
-            hintText: 'Write your email address',
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
+          filled: true,
+          fillColor: Colors.white,
+          labelText: 'User',
+          hintText: 'Write your email address',
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
         ),
         validator: (value) {
           if (value == null || value.isEmpty) return 'Sorry, user can\'t be empty.';
@@ -72,18 +74,20 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _passwordInput() {
     return Container(
-      margin: const EdgeInsets.only(bottom: 16.0),
+      margin: const EdgeInsets.only(bottom: 30.0),
       child: TextFormField(
         // TODO Act3: Añade el controlador
         controller: _pswrdController,
         obscureText: true,
         obscuringCharacter: '*',
         decoration: InputDecoration(
-            labelText: 'Password',
-            hintText: 'Write your password',
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
+          filled: true,
+          fillColor: Colors.white,
+          labelText: 'Password',
+          hintText: 'Write your password',
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
         ),
         validator: (value) {
           if (value == null || value.isEmpty) return 'Sorry, password can not be empty.';
@@ -100,10 +104,22 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _loginButton() {
     return Container(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(5.0),
       alignment: Alignment.centerRight,
       child: ElevatedButton(
-        child: const Text('Login'),
+        style: ButtonStyle(
+          backgroundColor: const WidgetStatePropertyAll(Colors.deepPurple),
+          shape: const WidgetStatePropertyAll(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10.0),
+              ),
+            ),
+          ),
+          fixedSize: WidgetStatePropertyAll(
+            Size(MediaQuery.of(context).size.width, 50)
+          ),
+          elevation: const WidgetStatePropertyAll(5.0),
+        ),
         onPressed: () {
           if (_formKey.currentState!.validate()) {
             // TODO Act3: Comprueba si el usuario existe y si la contraseña es correcta
@@ -121,7 +137,14 @@ class _LoginScreenState extends State<LoginScreen> {
               );
             }
           }
-        }
+        },
+        child: const Text(
+          'LOG IN',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 18
+          ),
+        )
       ),
     );
   }
