@@ -1,9 +1,15 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:t3_shopping_list/screens/products.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  // TODO Act3: Usarios de prueba
+  static final Map<String, String> users = {
+    'batoi@gmail.com': 'B_123456',
+    'anadam@gmail.com': 'A_123456',
+    'empar@gmail.com': 'E_profe1'
+  };
+
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -11,6 +17,17 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
+  // TODO Act3: Controladores para recoger los valores de los TextField del formulario
+  final _emailController = TextEditingController();
+  final _pswrdController = TextEditingController();
+
+  @override
+  void dispose() {
+    // TODO Act3: Deshabilita los controladores
+    _emailController.dispose();
+    _pswrdController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,19 +49,23 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _eMailInput() {
     return Container(
-      margin: EdgeInsets.only(bottom: 16.0),
+      margin: const EdgeInsets.only(bottom: 16.0),
       child: TextFormField(
+        // TODO Act3: Añade el controlador
+        controller: _emailController,
         decoration: InputDecoration(
-            labelText: 'User',
-            hintText: 'Write your email address',
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
+          filled: true,
+          fillColor: Colors.white,
+          labelText: 'User',
+          hintText: 'Write your email address',
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
         ),
         validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'Sorry, user can\'t be empty.';
-          }
+          if (value == null || value.isEmpty) return 'Sorry, user can\'t be empty.';
+          // TODO Act3: Comprueba si el usuario tiene @
+          if (!value.contains('@')) return 'Sorry, user has to be an email';
           return null;
         },
       ),
@@ -53,24 +74,28 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _passwordInput() {
     return Container(
-      margin: EdgeInsets.only(bottom: 16.0),
+      margin: const EdgeInsets.only(bottom: 30.0),
       child: TextFormField(
+        // TODO Act3: Añade el controlador
+        controller: _pswrdController,
         obscureText: true,
         obscuringCharacter: '*',
         decoration: InputDecoration(
-            labelText: 'Password',
-            hintText: 'Write your password',
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
+          filled: true,
+          fillColor: Colors.white,
+          labelText: 'Password',
+          hintText: 'Write your password',
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
         ),
         validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'Sorry, password can not be empty.';
-          }
-          if (value.length < 5) {
-            return 'Sorry, password length must be 5 characters or greater';
-          }
+          if (value == null || value.isEmpty) return 'Sorry, password can not be empty.';
+          // TODO Act3: Comprueba los distintos requisitos de la contraseña
+          if (value.length < 8) return 'Sorry, password length must be 8 characters or greater';
+          if (!value.contains(RegExp(r'[A-Z]'))) return 'Sorry, password has to contain at least one capital letter.';
+          if (!value.contains(RegExp(r'[0-9]'))) return 'Sorry, password has to contain at least one number.';
+          if (!value.contains(RegExp(r'[\W_]'))) return 'Sorry, password has to contain at least one symbol.';
           return null;
         },
       ),
@@ -79,19 +104,47 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _loginButton() {
     return Container(
-      padding: EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(5.0),
       alignment: Alignment.centerRight,
       child: ElevatedButton(
-        child: const Text('Login'),
+        style: ButtonStyle(
+          backgroundColor: const WidgetStatePropertyAll(Colors.deepPurple),
+          shape: const WidgetStatePropertyAll(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10.0),
+              ),
+            ),
+          ),
+          fixedSize: WidgetStatePropertyAll(
+            Size(MediaQuery.of(context).size.width, 50)
+          ),
+          elevation: const WidgetStatePropertyAll(5.0),
+        ),
         onPressed: () {
           if (_formKey.currentState!.validate()) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text(' Trying to login ...')),
-            );
+            // TODO Act3: Comprueba si el usuario existe y si la contraseña es correcta
+            final String email = _emailController.text;
 
-            Navigator.push(context, MaterialPageRoute(builder: (context) => ProductsScreen()));
+            if (LoginScreen.users.containsKey(email) && LoginScreen.users[email] == _pswrdController.text) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Logging in ... Welcome!'),),
+              );
+              // TODO Act3: Remplaza la pantalla actual por la de productos
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const ProductsScreen()));
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Incorrect user or password, try again.'),),
+              );
+            }
           }
-        }
+        },
+        child: const Text(
+          'LOG IN',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 18
+          ),
+        )
       ),
     );
   }

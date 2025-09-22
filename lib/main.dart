@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:t3_shopping_list/screens/login.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   static const _title = 'Shopping List';
+
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,8 +16,17 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: _title,
       home: Scaffold(
-        appBar: AppBar(title: const Text(_title),),
+        appBar: AppBar(
+          title: const Text(
+            _title,
+            style: TextStyle(color: Colors.white),
+          ),
+          elevation: 5.0,
+          shadowColor: Colors.black,
+          backgroundColor: Colors.deepPurple,
+        ),
         body: const LoginScreen(),
+        backgroundColor: Colors.deepPurple.shade50,
       ),
     );
   }
